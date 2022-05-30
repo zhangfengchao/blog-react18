@@ -1,0 +1,215 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f3f3f3;
+}
+
+.flex {
+    width: 100%;
+    display: flex;
+}
+
+
+.flex_layout {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: #f3f3f3;
+}
+
+.flex_row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.flex_row_sp {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex_row_center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.over_auto {
+    overflow: auto;
+}
+
+.padd_10 {
+    padding: 10px;
+}
+
+.menu_w {
+    min-width: 50%;
+}
+
+.ant-layout {
+    background-color: #fff;
+}
+
+.ant-layout-header {
+    padding: 0;
+    background: #fff;
+}
+
+.ant-layout-footer {
+    background-color: #f3f3f3;
+}
+
+.top_input {
+    max-width: 200px;
+}
+
+.top_pos {
+    position: relative;
+}
+
+.login_title {
+    margin-left: 20px;
+}
+
+.content_box {
+    margin-top: 5%;
+    padding: 0 20px;
+    display: flex;
+    // align-items: center;
+    justify-content: center;
+    background-color: #f3f3f3;
+}
+
+.fixed_top {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.weight {
+    font-weight: bold;
+}
+
+.bottom_border {
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.route_box {
+    min-width: 50%;
+    background-color: #fff;
+}
+
+.page_box {
+    background-color: #fff;
+    padding: 10px;
+    margin-top: 15px;
+    width: 780px;
+}
+
+.padd_10 {
+    padding: 10px;
+}
+
+.setting_box {
+    margin-top: 15px;
+    margin-left: 20px;
+    width: 300px;
+}
+
+.mar_b20 {
+    margin-bottom: 20px;
+}
+
+.pos_r {
+    position: relative;
+}
+
+.bac_fff {
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    transition: all .5s;
+    transform-origin: 0 0;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.car_box {
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.user_top {
+    border-radius: 5px 5px 0 0;
+    height: 80px;
+    background-image: linear-gradient(43deg, #4158d0, #c850c0 46%, #ffcc70);
+}
+
+.pos_t {
+    position: absolute;
+    top: 30px;
+}
+
+.user_name {
+    margin-top: 60px;
+}
+
+@media (max-width: 1110px) {
+
+    //PC小屏幕
+    //控制显隐区分样式
+    .page_box {
+        width: 100%;
+    }
+
+    .user_login {
+        display: none;
+    }
+
+    .setting_box {
+        display: none;
+    }
+}
+
+@media (max-width: 764px) {
+    //移动端
+    //控制显隐区分样式
+
+}
+
+.navOn {
+    transition: all 0.2s ease-in-out 0.2s;
+    transform: translateZ(0);
+}
+
+.navOff {
+    transition: all 0.2s ease-in-out 0.2s;
+    transform: translate3d(0, -100%, 0);
+}
+
+.keleyi {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+    background: no-repeat url("1013.01.png") left top;
+    -webkit-background-size: 220px 220px;
+    background-size: 220px 220px;
+    -webkit-border-radius: 110px;
+    border-radius: 110px;
+    // -webkit-transition: -webkit-transform 2s ease-out;
+}
+
+.keleyi:hover {
+    -webkit-transform: rotateZ(360deg);
+    transform: rotateZ(360deg);
+}
