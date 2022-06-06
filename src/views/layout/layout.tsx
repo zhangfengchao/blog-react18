@@ -1,8 +1,8 @@
-import React, { Suspense, useEffect, useMemo, useRef, useState } from "react"
-import { Routes, Route, Navigate } from 'react-router-dom'
+import React, { Suspense, useEffect, useRef, useState } from "react"
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { Layout, Menu, Input, Space, Button, Collapse } from 'antd';
 import router from '../../router'
-import { HomeOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import { HomeOutlined, AppstoreOutlined, SettingOutlined, EditOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 const { Panel } = Collapse;
 const { Header, Content, Footer } = Layout;
@@ -33,7 +33,7 @@ const items: MenuProps['items'] = [
 
 
 const LayoutPage: React.FC = () => {
-    const [current, setCurrent] = useState('mail');
+    const nav = useNavigate()
     const [top, settop] = useState(0)
     const tops = useRef(0)
 
@@ -41,9 +41,7 @@ const LayoutPage: React.FC = () => {
         window.addEventListener('scroll', () => { //实现隐藏上方导航栏
             settop(document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset)
         })
-        console.log(top > tops.current);
-
-    }, [])
+    }, [top])
 
     return <Layout className="layout">
         <Header className={top > tops.current ? 'navOff  ' : 'navOn'} >
@@ -51,12 +49,24 @@ const LayoutPage: React.FC = () => {
                 <Menu className="menu_w"
                     onClick={(e: any) => {
                         console.log(e);
-                    }} selectedKeys={[current]} mode="horizontal" items={items} />
+                    }} selectedKeys={['mail']} mode="horizontal" items={items} />
 
                 <Space>
                     <Input className="top_input" placeholder="搜索本站" />
                     <div className="login_title user_login">
                         登录
+                    </div>
+
+                    <div className="mar_l20" onClick={() => {
+                        nav('/editBlog', {
+                            replace: false,
+                            state: {
+                                a: 123
+                            }
+                        })
+                    }}>
+                        <EditOutlined />
+                        写文章
                     </div>
                 </Space>
             </div>
@@ -70,7 +80,7 @@ const LayoutPage: React.FC = () => {
             }
         </Header>
 
-        <div className="flex_layout">
+        <Content className="flex_layout">
             <div className="page_box">
                 <Routes>
                     <Route path="*" element={<Navigate to="home" />}></Route>
@@ -112,7 +122,7 @@ const LayoutPage: React.FC = () => {
                     </Collapse>
                 </div>
             </div>
-        </div>
+        </Content>
         <Footer style={{ textAlign: 'center' }}>Heelo world!</Footer>
     </Layout>
 }

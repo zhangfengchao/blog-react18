@@ -8,8 +8,10 @@
  * ```
  */
 const apiList = {
-    getData: '/getData',
-    othersData: '/othersData'
+    newBlog: 'newBlogs',
+    getAllClass: 'getAllClass',
+    getAllLabel: 'getAllLabel',
+    getHomeBlogs: 'getHomeBlogs'
 }
 /**
  * @description: 所有的接口列表类型
@@ -23,13 +25,25 @@ export type apiKeyType = keyof typeof apiList;
  * @return {*} 无返回值
  */
 export interface apiKeyDataType {
-    'getData': {
+    'newBlog': {
         code: number;
-        data: any
+        data: any;
+        message: string
     },
-    'othersData': {
+    'getAllClass': {
         code: number;
-        data: any
+        data: any;
+        message: string
+    },
+    'getAllLabel': {
+        code: number;
+        data: any;
+        message: string
+    },
+    'getHomeBlogs': {
+        code: number;
+        data: any;
+        message: string
     }
 }
 

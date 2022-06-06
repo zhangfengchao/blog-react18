@@ -11,6 +11,10 @@ const router: Array<Router> = [
     {
         path: '/home',
         component: lazy(() => import('../views/home/home'))
+    },
+    {
+        path: '/editBlog',
+        component: lazy(() => import('../views/editBlog/editBlog'))
     }
 ]
 
