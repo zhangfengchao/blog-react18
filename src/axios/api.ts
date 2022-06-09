@@ -11,7 +11,8 @@ const apiList = {
     newBlog: 'newBlogs',
     getAllClass: 'getAllClass',
     getAllLabel: 'getAllLabel',
-    getHomeBlogs: 'getHomeBlogs'
+    getHomeBlogs: 'getHomeBlogs',
+    getBlogDetails: 'getBlogDetails'
 }
 /**
  * @description: 所有的接口列表类型
@@ -44,7 +45,12 @@ export interface apiKeyDataType {
         code: number;
         data: any;
         message: string
-    }
+    },
+    'getBlogDetails': {
+        code: number;
+        data: any;
+        message: string
+    },
 }
 
 export default apiList;

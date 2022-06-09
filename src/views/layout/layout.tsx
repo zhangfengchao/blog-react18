@@ -1,17 +1,19 @@
 import React, { Suspense, useEffect, useRef, useState } from "react"
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
-import { Layout, Menu, Input, Space, Button, Collapse } from 'antd';
+import { Layout, Menu, Input, Space, Button, Collapse, Dropdown } from 'antd';
 import router from '../../router'
-import { HomeOutlined, AppstoreOutlined, SettingOutlined, EditOutlined } from '@ant-design/icons';
+import { HomeOutlined, AppstoreOutlined, SettingOutlined, EditOutlined, LikeOutlined, UserAddOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
+import { searchDataAction } from '../../redux/count_action_creator'
+import { useDispatch } from "react-redux";
 const { Panel } = Collapse;
 const { Header, Content, Footer } = Layout;
-
+const { Search } = Input;
 
 const items: MenuProps['items'] = [
     {
         label: '首页',
-        key: 'mail',
+        key: '/home',
         icon: <HomeOutlined />
     },
     {
@@ -33,41 +35,79 @@ const items: MenuProps['items'] = [
 
 
 const LayoutPage: React.FC = () => {
+    const dispatch = useDispatch()
     const nav = useNavigate()
     const [top, settop] = useState(0)
     const tops = useRef(0)
+    const [defaultKey, setdefaultKey] = useState(['/home'])
 
     useEffect(() => {
+        dispatch(searchDataAction({ searchData: '' }))
         window.addEventListener('scroll', () => { //实现隐藏上方导航栏
             settop(document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset)
         })
-    }, [top])
+    }, [top, dispatch])
+
+    const menu = (
+        <Menu
+            items={[
+                {
+                    key: '1',
+                    label: (
+                        <div onClick={() => {
+                            nav('/editBlog', {
+                                replace: false,
+                                state: {
+                                    a: 123
+                                }
+                            })
+                        }}>
+                            <EditOutlined />
+                            写文章
+                        </div>
+                    ),
+                },
+                {
+                    key: '2',
+                    label: (
+                        <div onClick={() => {
+                            nav('/editBlog', {
+                                replace: false,
+                                state: {
+                                    a: 123
+                                }
+                            })
+                        }}>
+                            <LikeOutlined />
+                            我赞过的
+                        </div>
+                    ),
+                }
+            ]}
+        />
+    );
 
     return <Layout className="layout">
         <Header className={top > tops.current ? 'navOff  ' : 'navOn'} >
             <div className="flex_row_center">
                 <Menu className="menu_w"
                     onClick={(e: any) => {
-                        console.log(e);
-                    }} selectedKeys={['mail']} mode="horizontal" items={items} />
-
-                <Space>
-                    <Input className="top_input" placeholder="搜索本站" />
-                    <div className="login_title user_login">
-                        登录
-                    </div>
-
-                    <div className="mar_l20" onClick={() => {
-                        nav('/editBlog', {
+                        setdefaultKey(e.keyPath)
+                        nav(e.key, {
                             replace: false,
-                            state: {
-                                a: 123
-                            }
                         })
-                    }}>
-                        <EditOutlined />
-                        写文章
-                    </div>
+                    }} selectedKeys={defaultKey} mode="horizontal" items={items} />
+
+                <Search className="" placeholder="搜索本站" onSearch={(e: any) => dispatch(searchDataAction({ searchData: e }))} style={{ width: 200 }} />
+                <Space>
+
+                    <Dropdown className="login_title user_login cursor" overlay={menu} placement="bottomLeft" arrow>
+                        <Button type="text">
+                            <Space>
+                                <UserAddOutlined />登录</Space>
+                        </Button>
+                    </Dropdown>
+
                 </Space>
             </div>
         </Header>

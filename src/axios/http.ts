@@ -22,7 +22,8 @@ interface NewAxiosInstance extends AxiosInstance {
 
 //基本的初始化设置
 let http: NewAxiosInstance = axios.create({
-    baseURL: 'http://43.138.110.230/v1/gin/api/', //因为使用的是vite构建的项目，所以这里是这么获取代理名称的，根据自己情况修改
+    // baseURL: 'http://43.138.110.230/v1/gin/api/', 
+    baseURL: 'http://localhost:8080/v1/gin/api/',
     timeout: 3 * 1000// 超时时间
 });
 

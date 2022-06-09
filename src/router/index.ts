@@ -15,7 +15,12 @@ const router: Array<Router> = [
     {
         path: '/editBlog',
         component: lazy(() => import('../views/editBlog/editBlog'))
-    }
+    },
+    {
+        path: '/blogDetail',
+        component: lazy(() => import('../views/blogDetail/blogDetail'))
+    },
+
 ]
 
 export default router
