@@ -22,15 +22,16 @@ interface NewAxiosInstance extends AxiosInstance {
 
 //基本的初始化设置
 let http: NewAxiosInstance = axios.create({
-    // baseURL: 'http://43.138.110.230/v1/gin/api/', 
-    baseURL: 'http://localhost:8080/v1/gin/api/',
-    timeout: 3 * 1000// 超时时间
+    baseURL: 'http://43.138.110.230/v1/gin/api/',
+    // baseURL: 'http://localhost:8080/v1/gin/api/',
+    timeout: 3000// 超时时间
 });
 
 // 请求拦截器
 const QS_METHOD: Method[] = ['POST', 'post', 'PUT', 'put'];
 const GET_METHOD: Method[] = ['GET', 'get', 'DELETE', 'delete'];
 http.interceptors.request.use((response: any) => {
+    response.Authorization = ''
     if (response.method && QS_METHOD.includes(response.method)) {// 这里只处理post请求，根据自己情况修改
         // response.data = qs.stringify(response.data);
     } else if (response.method && GET_METHOD.includes(response.method)) {//设置GET的请求参数

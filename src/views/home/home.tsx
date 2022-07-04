@@ -1,19 +1,28 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Space, Divider, Card, Skeleton, Image, message } from 'antd'
-import axios from '../../axios/axios'
+import { Space, Divider, Card, Skeleton, Image, message, Empty } from 'antd'
+import axiosFunc from '../../axios/axios'
 import { EyeOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons'
 import { useNavigate } from "react-router-dom"
 import moment from 'moment';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getDates } from '../../utils/utils'
+import { isVisibleAction } from '../../redux/count_action_creator'
+interface paramsType {
+    userId: any,
+    page: any,
+    pageSize: any,
+    context: any,
+    classId?: any
+}
 
 const Home: React.FC = () => {
     const nav = useNavigate()
-    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch()
+    const [loading, setLoading] = useState<boolean>(true);
     const [tabIndex, settabIndex] = useState(1)
     const [page] = useState(1)
-    // const [isBottom, setisBottom] = useState(false)
     const [blogList, setblogList] = useState([])
-    const store = useSelector((state: any) => state)
+    const store = useSelector((state: any) => state.react)
 
     const tabs = useRef([
         {
@@ -28,31 +37,41 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         getHomeBlog()
-
         return () => {
 
         }
-    }, [store.react.searchData])// eslint-disable-line
+    }, [store.searchData, store.userInfo, store.classId])// eslint-disable-line
 
 
     const getHomeBlog = async () => {
-        // if (isBottom && !store.react.searchData) return
-        let res = await axios({
-            url: 'getHomeBlogs',
-            method: 'GET',
-            data: {
+        let params: paramsType = {
+            userId: store.userInfo.user_id,
+            page,
+            context: store.searchData ? store.searchData : null,
+            pageSize: 10
+        }
+
+        if (store.classId && store.classId !== '0') {
+            params = {
+                userId: store.userInfo.user_id,
                 page,
-                context: store.react.searchData ? store.react.searchData : null,
+                classId: store.classId,
+                context: store.searchData ? store.searchData : null,
                 pageSize: 10
             }
+        }
+        setLoading(true)
+        let res = await axiosFunc({
+            url: 'getHomeBlogs',
+            method: 'GET',
+            data: params
         })
 
         if (res.code === 200) {
-
-            if (store.react.searchData) {
+            if (store.searchData) {
                 message.success("搜索成功")
             }
-            if (loading) setLoading(false)
+            if (store.classId && store.classId !== '0') setblogList([])
             if (res.data.length) { //还有数据
                 // if (res.data.length !== 10) setisBottom(true)
                 let list: any = []
@@ -64,15 +83,16 @@ const Home: React.FC = () => {
                 // setisBottom(true)
             }
         }
+        setLoading(false)
+
     }
 
-
-    return <>
+    return <div className="bac_fffs">
         <div className="flex_row padd10_right" id="home">
             {
                 tabs.current.map((i: any, k: number) =>
                     <Space key={k} >
-                        <div onClick={() => settabIndex(Number(i.key))} className={tabIndex === i.key ? 'isRadio cursor' : 'cursor'}>{i.name}</div>
+                        <div onClick={() => settabIndex(Number(i.key))} className={tabIndex === i.key ? 'isRadio size_none cursor' : 'size_none cursor'}>{i.name}</div>
                         <Divider type={'vertical'} />
                     </Space>
                 )
@@ -81,16 +101,15 @@ const Home: React.FC = () => {
         <div className="border_bottom"></div>
         {
             blogList.length ? blogList.map((i: any, k: number) =>
-                <Card loading={loading} bordered={false} key={k} hoverable={true} className='posr' onClick={() => {
-                    console.log("进入详情");
-                    nav('/blogDetail', {
-                        replace: false,
-                        state: {
-                            blogId: i.blog_id
-                        }
-                    })
-                }}>
-                    <Space className="blue cursor">
+                <Card loading={loading} bordered={false} key={k} hoverable={true} className='posr'>
+                    <Space className="blue cursor" onClick={() => {
+                        nav('/blogDetail', {
+                            replace: false,
+                            state: {
+                                blogId: i.blog_id
+                            }
+                        })
+                    }}>
                         <span className="f4f4">{i.user_name}</span>
                         <span className="f3f3">|</span>
                         <span>{moment(i.create_time).fromNow()}</span>
@@ -106,9 +125,25 @@ const Home: React.FC = () => {
 
                     <div className="flex">
                         <div className="right_boxs">
-                            <div className="titles mar_t10">{i.title}</div>
-                            <div className="mar_t10 blue">
-                                {i.title}
+                            <div className="titles mar_t10" onClick={() => {
+                                nav('/blogDetail', {
+                                    replace: false,
+                                    state: {
+                                        blogId: i.blog_id,
+                                        isPraise: i.isPraise
+                                    }
+                                })
+                            }}>{i.title}</div>
+                            <div className="mar_t10 blue" onClick={() => {
+                                nav('/blogDetail', {
+                                    replace: false,
+                                    state: {
+                                        blogId: i.blog_id,
+                                        isPraise: i.isPraise
+                                    }
+                                })
+                            }}>
+                                {i.summary}
                             </div>
 
                             <Space className="mar_t10 blue">
@@ -119,10 +154,38 @@ const Home: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex_row mar_l15">
-                                    <LikeOutlined />
-                                    <div className="mar_l2">
-                                        {i.like_int}
+                                <div className="flex_row mar_l15" onClick={async () => {
+                                    if (!store.userInfo.user_id) {
+                                        message.info("请登录后再试 :）")
+                                        dispatch(isVisibleAction({
+                                            isVisible: true
+                                        }))
+
+                                        return
+                                    }
+                                    let res = await axiosFunc({
+                                        url: 'addUserPraise',
+                                        method: 'POST',
+                                        data: {
+                                            type: 1,
+                                            userId: store.userInfo.user_id,
+                                            blogId: i.blog_id,
+                                            createTime: await getDates(new Date(), 'time'),
+                                            isAdd: i.isPraise ? 2 : 1
+                                        }
+                                    })
+
+                                    if (res.code === 200) {
+                                        i.isPraise = !i.isPraise
+                                        if (i.isPraise) i.like_int++
+                                        else i.like_int--
+                                        setblogList(JSON.parse(JSON.stringify(blogList)))
+                                    } else message.info(res.message)
+
+                                }}>
+                                    <LikeOutlined className={i.isPraise ? 'blues' : ''} />
+                                    <div className="mar_l2" >
+                                        <span className={i.isPraise ? 'blues' : ''}>{i.like_int}</span>
                                     </div>
                                 </div>
 
@@ -141,9 +204,11 @@ const Home: React.FC = () => {
                         </div>
                     </div>
                 </Card>
-            ) : <Skeleton loading={loading} avatar active />
+            ) : <>{
+                loading ? <Skeleton loading={loading} avatar active /> : <Empty />
+            }</>
         }
-    </>
+    </div>
 
 }
 

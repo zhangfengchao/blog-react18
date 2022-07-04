@@ -1,7 +1,9 @@
 
 const reduxSate: any = {
     userInfo: {},
-    searchData: ''
+    searchData: '',
+    isVisible: false,
+    classId: '0'
 }
 
 export default reduxSate

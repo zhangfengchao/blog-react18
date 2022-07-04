@@ -1,4 +1,3 @@
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 import React, { useState, useEffect } from 'react'
 import { Editor, Toolbar } from '@wangeditor/editor-for-react'
@@ -18,8 +17,8 @@ const MyEditor: React.FC = () => {
     const [title, settitle] = useState('')
     const [diopFlag, setdiopFlag] = useState(false)
     const [classId, setclassId] = useState()
-    const [blogImg, setblogImg] = useState('')
-    const [smmary, setsmmary] = useState('')
+    const [blogImg, setblogImg] = useState<string>('https://img1.baidu.com/it/u=1283015551,382418629&fm=253&fmt=auto&app=120&f=JPEG?w=708&h=500')
+    const [summary, setsummary] = useState('')
     const [labels, setlabels] = useState([])
     const [labelList, setlabelList] = useState([{
         label_id: null,
@@ -95,11 +94,9 @@ const MyEditor: React.FC = () => {
             blogUser: 1,
             classId,
             blogImg,
-            smmary,
+            summary,
             labelId: labels.join('_')
         }
-
-        console.log(params, "params");
 
         const res = await axios({
             url: 'newBlog',
@@ -159,14 +156,14 @@ const MyEditor: React.FC = () => {
                     文章封面：
                 </div>
 
-                <Input placeholder='请输入文章封面图片链接' onInput={e => setblogImg((e.target as any).value)}></Input>
+                <Input placeholder='请输入文章封面图片链接' value={blogImg} onInput={e => setblogImg((e.target as any).value)}></Input>
             </div>
 
             <div className='flex mar_b20'>
                 <div className='title_f'>
                     文章摘要：
                 </div>
-                <TextArea className='max_textarea' showCount maxLength={100} style={{ height: 120 }} onChange={e => setsmmary((e.target as any).value)} />
+                <TextArea className='max_textarea' showCount maxLength={100} style={{ height: 120 }} onChange={e => setsummary((e.target as any).value)} />
             </div>
             <Divider />
             <div className='right'>
@@ -188,14 +185,18 @@ const MyEditor: React.FC = () => {
         <>
             <div>
                 <div className='right mar_b10 mar_r10'>
-                    <Dropdown
-                        visible={diopFlag}
-                        overlay={confirmDiog}
-                        placement="bottomRight"
-                        arrow
-                        trigger={['click']}>
-                        <Button type={'primary'} onClick={() => setdiopFlag(true)} >发布</Button>
-                    </Dropdown>
+                    <Space>
+                        <Button onClick={() => nav(-1)} >取消</Button>
+                        <Dropdown
+                            visible={diopFlag}
+                            overlay={confirmDiog}
+                            placement="bottomRight"
+                            arrow
+                            trigger={['click']}>
+                            <Button type={'primary'} onClick={() => setdiopFlag(true)} >发布</Button>
+                        </Dropdown>
+                    </Space>
+
                 </div>
 
                 <Toolbar

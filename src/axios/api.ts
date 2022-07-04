@@ -8,11 +8,15 @@
  * ```
  */
 const apiList = {
+    userLogin: 'userLogin',
     newBlog: 'newBlogs',
     getAllClass: 'getAllClass',
     getAllLabel: 'getAllLabel',
     getHomeBlogs: 'getHomeBlogs',
-    getBlogDetails: 'getBlogDetails'
+    getBlogDetails: 'getBlogDetails',
+    addComment: 'addComment',
+    getAllComment: 'getAllComment',
+    addUserPraise: 'addUserPraise',
 }
 /**
  * @description: 所有的接口列表类型
@@ -26,6 +30,11 @@ export type apiKeyType = keyof typeof apiList;
  * @return {*} 无返回值
  */
 export interface apiKeyDataType {
+    'userLogin': {
+        code: number;
+        data: any;
+        message: string
+    },
     'newBlog': {
         code: number;
         data: any;
@@ -47,6 +56,20 @@ export interface apiKeyDataType {
         message: string
     },
     'getBlogDetails': {
+        code: number;
+        data: any;
+        message: string
+    },
+    'addComment': {
+        code: number;
+        message: string
+    },
+    'getAllComment': {
+        code: number;
+        data: any;
+        message: string
+    },
+    'addUserPraise': {
         code: number;
         data: any;
         message: string

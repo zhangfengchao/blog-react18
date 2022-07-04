@@ -72,6 +72,10 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
+// 配置rem
+const px2rem = require('postcss-pxtorem');
+
+
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
     return false;
@@ -133,6 +137,7 @@ module.exports = function (webpackEnv) {
             config: false,
             plugins: !useTailwind
               ? [
+                'postcss-nested',
                 'postcss-flexbugs-fixes',
                 [
                   'postcss-preset-env',
@@ -140,12 +145,19 @@ module.exports = function (webpackEnv) {
                     autoprefixer: {
                       flexbox: 'no-2009',
                     },
-                    stage: 3,
+                    stage: 3
                   },
                 ],
                 // Adds PostCSS Normalize as the reset css with default options,
                 // so that it honors browserslist config in package.json
                 // which in turn let's users customize the target behavior as per their needs.
+                px2rem({
+                  rootValue: 37.5, //设计稿宽/10
+                  selectorBlackList: [], //过滤
+                  propList: ['*'],
+                  minPixelValue: 2,
+                  exclude: /node_modules/i
+                }), //设计稿根据750px(iphone6)
                 'postcss-normalize',
               ]
               : [
@@ -160,11 +172,19 @@ module.exports = function (webpackEnv) {
                     stage: 3,
                   },
                 ],
+                px2rem({
+                  rootValue: 37.5,//设计稿宽/10
+                  selectorBlackList: [], //过滤
+                  propList: ['*'],
+                  minPixelValue: 2,
+                  exclude: /node_modules/i
+                }), //设计稿根据750px(iphone6)
               ],
           },
           sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
         },
       },
+
     ].filter(Boolean);
     if (preProcessor) {
       loaders.push(
