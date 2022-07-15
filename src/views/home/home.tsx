@@ -91,8 +91,11 @@ const Home: React.FC = () => {
         <div className="flex_row padd10_right" id="home">
             {
                 tabs.current.map((i: any, k: number) =>
-                    <Space key={k} >
-                        <div onClick={() => settabIndex(Number(i.key))} className={tabIndex === i.key ? 'isRadio size_none cursor' : 'size_none cursor'}>{i.name}</div>
+                    <Space key={k}>
+                        <div onClick={() => settabIndex(Number(i.key))}
+                            className={tabIndex === i.key ? 'isRadio size_none cursor' : 'size_none cursor'}>
+                            {i.name}
+                        </div>
                         <Divider type={'vertical'} />
                     </Space>
                 )

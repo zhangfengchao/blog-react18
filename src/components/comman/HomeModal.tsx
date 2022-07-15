@@ -39,9 +39,7 @@ const HomeModal: React.FC<ModalCom> = (props) => {
                 } else message.info(`登录失败${res.message}`)
 
             }}
-            onFinishFailed={() => {
-                message.info("请正确输入账号、密码 :）")
-            }}
+            onFinishFailed={() => message.info("请正确输入账号、密码 :）")}
             autoComplete="off"
         >
             <Form.Item
@@ -66,7 +64,6 @@ const HomeModal: React.FC<ModalCom> = (props) => {
             </div>
         </Form>
     </Modal>
-
 }
 
 export default HomeModal
